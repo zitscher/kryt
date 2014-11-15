@@ -1,0 +1,18 @@
+html,
+body {
+  background: #497bad;
+  color: #ffffff;
+  text-align: center;
+  padding: 30px 0;
+}
+.container {
+  border: 2px dashed rgba(255, 255, 255, 0.3);
+}
+.container .row [class*="col-"] {
+  border: 2px dashed rgba(255, 255, 255, 0.2);
+}
+.container .row [class*="col-"] .element {
+  padding: 20px;
+  background: rgba(225, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}

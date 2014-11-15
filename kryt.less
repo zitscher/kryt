@@ -1,0 +1,151 @@
+.border-box() {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+
+// kryt settings
+// -------------------------
+@kryt-columns: 						12;
+
+// Breakpoints
+// -------------------------
+
+// Desktop sm
+@kryt-desktop-width:				980px;
+@kryt-desktop-gutter:				20px;
+@kryt-desktop-spacing-bottom:		20px;
+@kryt-desktop-border:				2px;
+// Tablet
+@kryt-tablet-width:					768px;
+@kryt-tablet-gutter:				20px;
+@kryt-tablet-spacing-bottom:		20px;
+@kryt-tablet-border:				2px;
+
+// Mobile
+@kryt-mobile-width:					100%;
+@kryt-mobile-gutter:				20px;
+@kryt-mobile-spacing-bottom:		20px;
+
+@desktop-sm: 	~"only screen and (min-width: 1025px)";
+@tablet: 		~"only screen and (min-width: 768px) and (max-width: 1024px)";
+@mobile: 		~"only screen and (max-width: 767px)";
+
+// kryd basic styles
+.container {
+	.border-box();
+	position: relative;
+	margin: 0 auto;
+
+	.row {
+		.border-box();
+		position: relative;
+		display: block;
+
+		&:last-of-type {
+			margin-bottom: 0;
+		}
+
+		[class*="col-"] {
+			.border-box();
+			float: left;
+			position: relative;
+			padding: 0;
+
+			.element:last-of-type {
+				margin-bottom: 0;
+			}
+
+			&:last-of-type {
+				margin-right: 0;
+			}
+		}
+
+		// Self Clearing Awesomeness
+		&:after {
+			content: "\0020";
+			display: block;
+			height: 0;
+			clear: both;
+			visibility: hidden;
+		}
+	}
+
+	// Small Desktops
+	// -------------------------
+	@media @desktop-sm {
+		.generate-kryd(@kryt-desktop-width, @kryt-desktop-gutter, @kryt-desktop-spacing-bottom, @kryt-desktop-border);
+	}
+
+	// Tablets
+	// -------------------------
+	@media @tablet {
+		.generate-kryd(@kryt-tablet-width, @kryt-tablet-gutter, @kryt-tablet-spacing-bottom, @kryt-tablet-border);
+	}
+
+	// Mobiles
+	// -------------------------
+	@media @mobile {
+		.generate-kryd(@kryt-mobile-width, @kryt-mobile-gutter, @kryt-mobile-spacing-bottom);
+	}
+
+	// Print Layout
+	// -------------------------
+	@media print {
+		.generate-kryd(@kryt-desktop-width, @kryt-desktop-gutter, @kryt-desktop-gutter);
+	}
+}
+
+// kryd generator
+// -------------------------
+.generate-kryd(@width, @gutter, @spacing-bottom, @border: 0)  {
+	// calculate width for a single col
+	@single-column-width: ((@width - @gutter) / @kryt-columns) - @gutter;
+
+	// kryd container width
+	width: @width;
+	// kryd gutter left and right
+	padding: @gutter (@gutter - @border);
+
+	.row {
+		margin-bottom: @spacing-bottom;
+
+		// initialize col generation
+		.generate-cols(@kryt-columns);
+
+		// loop for widths in pixel
+		.generate-cols(@n, @i: 1) when (@i =< @n) and (ispixel(@width)) {
+			.col-@{i} {
+				// calculate width for each col-i
+				width: (@single-column-width * @i) + (@gutter * (@i - 1));
+				// spacing between columns
+				margin: 0 @gutter 0 0;
+			}
+
+			// increment column count
+			.generate-cols(@n, (@i + 1));
+		}
+
+		// loop for widths in percentage
+		.generate-cols(@n, @i: 1) when (@i =< @n) and (ispercentage(@width)) {
+			.col-@{i} {
+				// calculate width for each col-i
+				width: @width;
+				// spacing between columns
+				margin: 0 0 @gutter 0;
+
+				&:last-of-type {
+					margin: 0;
+				}
+			}
+
+			// increment column count
+			.generate-cols(@n, (@i + 1));
+		}
+
+		.element {
+			margin-bottom: @spacing-bottom;
+		}
+	}
+}
