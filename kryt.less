@@ -76,39 +76,38 @@
 
 	// Desktops
 	// -------------------------
-
 	// large Screens
 	@media @desktop-xl {
-		.generate-kryd(@kryt-desktop-xl-width, @kryt-desktop-xl-gutter, @kryt-desktop-xl-border);
+		.generate-kryt(@kryt-desktop-xl-width, @kryt-desktop-xl-gutter, @kryt-desktop-xl-border);
 	}
 
 	// small Screens
 	@media @desktop-sm {
-		.generate-kryd(@kryt-desktop-sm-width, @kryt-desktop-sm-gutter, @kryt-desktop-sm-border);
+		.generate-kryt(@kryt-desktop-sm-width, @kryt-desktop-sm-gutter, @kryt-desktop-sm-border);
 	}
 
 	// Tablets
 	// -------------------------
 	@media @tablet {
-		.generate-kryd(@kryt-tablet-width, @kryt-tablet-gutter, @kryt-tablet-border);
+		.generate-kryt(@kryt-tablet-width, @kryt-tablet-gutter, @kryt-tablet-border);
 	}
 
 	// Mobiles
 	// -------------------------
 	@media @mobile {
-		.generate-kryd(@kryt-mobile-width, @kryt-mobile-gutter);
+		.generate-kryt(@kryt-mobile-width, @kryt-mobile-gutter);
 	}
 
 	// Print Layout
 	// -------------------------
 	@media print {
-		.generate-kryd(@kryt-desktop-sm-width, @kryt-desktop-sm-gutter);
+		.generate-kryt(@kryt-desktop-sm-width, @kryt-desktop-sm-gutter);
 	}
 }
 
 // kryd generator
 // -------------------------
-.generate-kryd(@width, @gutter, @border: 0)  {
+.generate-kryt(@width, @gutter, @border: 0)  {
 	// calculate width for a single col
 	@single-column-width: ((@width - @gutter) / @kryt-columns) - @gutter;
 
