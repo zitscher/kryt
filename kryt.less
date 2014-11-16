@@ -1,36 +1,38 @@
-.border-box() {
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-}
-
-
-// kryt settings
+// kryt total columns
 // -------------------------
-@kryt-columns: 						12;
+@kryt-columns: 12;
+
+// Desktop grid size
+// large Screens
+// -------------------------
+@kryt-desktop-xl-width:	1220px;
+@kryt-desktop-xl-gutter:  30px;
+@kryt-desktop-xl-border:   2px;
+
+// Desktop grid size
+// small Screens
+// -------------------------
+@kryt-desktop-sm-width:	980px;
+@kryt-desktop-sm-gutter: 20px;
+@kryt-desktop-sm-border:  2px;
+
+// Tablet grid size
+// -------------------------
+@kryt-tablet-width: 768px;
+@kryt-tablet-gutter: 20px;
+@kryt-tablet-border:  2px;
+
+// Mobile grid size
+// -------------------------
+@kryt-mobile-width:  100%;
+@kryt-mobile-gutter: 10px;
 
 // Breakpoints
 // -------------------------
-
-// Desktop sm
-@kryt-desktop-width:				980px;
-@kryt-desktop-gutter:				20px;
-@kryt-desktop-spacing-bottom:		20px;
-@kryt-desktop-border:				2px;
-// Tablet
-@kryt-tablet-width:					768px;
-@kryt-tablet-gutter:				20px;
-@kryt-tablet-spacing-bottom:		20px;
-@kryt-tablet-border:				2px;
-
-// Mobile
-@kryt-mobile-width:					100%;
-@kryt-mobile-gutter:				20px;
-@kryt-mobile-spacing-bottom:		20px;
-
-@desktop-sm: 	~"only screen and (min-width: 1025px)";
-@tablet: 		~"only screen and (min-width: 768px) and (max-width: 1024px)";
-@mobile: 		~"only screen and (max-width: 767px)";
+@desktop-xl:	~"only screen and (min-width: 1225px)";
+@desktop-sm:	~"only screen and (min-width: 1025px) and (max-width: 1224px)";
+@tablet:		~"only screen and (min-width:  768px) and (max-width: 1024px)";
+@mobile:		~"only screen and (max-width:  767px)";
 
 // kryd basic styles
 .container {
@@ -72,34 +74,41 @@
 		}
 	}
 
-	// Small Desktops
+	// Desktops
 	// -------------------------
+
+	// large Screens
+	@media @desktop-xl {
+		.generate-kryd(@kryt-desktop-xl-width, @kryt-desktop-xl-gutter, @kryt-desktop-xl-border);
+	}
+
+	// small Screens
 	@media @desktop-sm {
-		.generate-kryd(@kryt-desktop-width, @kryt-desktop-gutter, @kryt-desktop-spacing-bottom, @kryt-desktop-border);
+		.generate-kryd(@kryt-desktop-sm-width, @kryt-desktop-sm-gutter, @kryt-desktop-sm-border);
 	}
 
 	// Tablets
 	// -------------------------
 	@media @tablet {
-		.generate-kryd(@kryt-tablet-width, @kryt-tablet-gutter, @kryt-tablet-spacing-bottom, @kryt-tablet-border);
+		.generate-kryd(@kryt-tablet-width, @kryt-tablet-gutter, @kryt-tablet-border);
 	}
 
 	// Mobiles
 	// -------------------------
 	@media @mobile {
-		.generate-kryd(@kryt-mobile-width, @kryt-mobile-gutter, @kryt-mobile-spacing-bottom);
+		.generate-kryd(@kryt-mobile-width, @kryt-mobile-gutter);
 	}
 
 	// Print Layout
 	// -------------------------
 	@media print {
-		.generate-kryd(@kryt-desktop-width, @kryt-desktop-gutter, @kryt-desktop-gutter);
+		.generate-kryd(@kryt-desktop-sm-width, @kryt-desktop-sm-gutter);
 	}
 }
 
 // kryd generator
 // -------------------------
-.generate-kryd(@width, @gutter, @spacing-bottom, @border: 0)  {
+.generate-kryd(@width, @gutter, @border: 0)  {
 	// calculate width for a single col
 	@single-column-width: ((@width - @gutter) / @kryt-columns) - @gutter;
 
@@ -109,18 +118,22 @@
 	padding: @gutter (@gutter - @border);
 
 	.row {
-		margin-bottom: @spacing-bottom;
+		// spacing between columns
+		margin-bottom: @gutter;
 
-		// initialize col generation
+		// spacing between columns
+		[class*="col-"] {
+			margin: 0 @gutter 0 0;
+		}
+
+		// initialize col width generation
 		.generate-cols(@kryt-columns);
 
 		// loop for widths in pixel
+		// calculate width for each col-i
 		.generate-cols(@n, @i: 1) when (@i =< @n) and (ispixel(@width)) {
 			.col-@{i} {
-				// calculate width for each col-i
 				width: (@single-column-width * @i) + (@gutter * (@i - 1));
-				// spacing between columns
-				margin: 0 @gutter 0 0;
 			}
 
 			// increment column count
@@ -128,11 +141,11 @@
 		}
 
 		// loop for widths in percentage
+		// calculate width for each col-i
 		.generate-cols(@n, @i: 1) when (@i =< @n) and (ispercentage(@width)) {
 			.col-@{i} {
-				// calculate width for each col-i
 				width: @width;
-				// spacing between columns
+				// spacing between mobile columns
 				margin: 0 0 @gutter 0;
 
 				&:last-of-type {
@@ -144,8 +157,16 @@
 			.generate-cols(@n, (@i + 1));
 		}
 
+		// spacing between each element in column
 		.element {
-			margin-bottom: @spacing-bottom;
+			margin-bottom: @gutter;
 		}
 	}
+}
+
+// mixins
+.border-box() {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
 }
