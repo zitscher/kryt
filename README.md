@@ -9,11 +9,10 @@ If you choose a grid width of `980px` and a column count of `12` you will get `6
 
 ```
 @single-column-width: ((@gridwidth - @gutter) / @columns) - @gutter;
-
 ```
 
 #### Compiled CSS
-```
+```css
 .container {
   width: 980px;
   padding: 20px 18px;
